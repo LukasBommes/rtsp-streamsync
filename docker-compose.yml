@@ -1,0 +1,17 @@
+version: "2.3"
+
+services:
+
+  stream_sync_dev:
+    container_name: stream_sync_dev
+    build: .
+    cap_add:
+      - SYS_PTRACE # for debugging with GDB
+    security_opt:
+      - seccomp:unconfined  # for debugging with GDB
+    environment:
+      - DISPLAY
+    ipc: host # for GUI
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # for GUI access
+      - .:/home/stream_sync
