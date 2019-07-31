@@ -4,7 +4,6 @@ ENV HOME "/home"
 
 RUN apt-get update && \
   apt-get install -y \
-    wget \
     git && \
     rm -rf /var/lib/apt/lists/*
 
@@ -16,7 +15,7 @@ RUN apt-get update && \
 
 # Build h264-videocap from source
 RUN cd $HOME && \
-  git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/h264-videocap.git video_cap && \
+  git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/sfmt-videocap.git video_cap && \
   cd video_cap && \
   chmod +x install.sh && \
   ./install.sh
@@ -40,7 +39,7 @@ COPY setup.py $HOME/stream_sync
 COPY src $HOME/stream_sync/src/
 
 # Install stream_sync Python module
-RUN cd /home/video_cap && \
+RUN cd /home/stream_sync && \
   python3 setup.py install
 
 WORKDIR $HOME

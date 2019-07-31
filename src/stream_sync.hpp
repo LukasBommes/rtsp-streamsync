@@ -16,7 +16,7 @@
 // OpenCV
 #include <opencv2/opencv.hpp>
 
-#include "../video_cap/video_cap_validator.hpp"
+#include "../../video_cap/src/video_cap_validator.hpp"
 #include "exceptions.hpp"
 #include "shared_queue.hpp"
 
