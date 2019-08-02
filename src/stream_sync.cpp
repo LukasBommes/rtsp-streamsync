@@ -186,14 +186,14 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
             // since we do not retrieve any FrameData from buffer, we need to create an empty one first
             frame_data = std::make_shared<FrameData>();
             (*frame_data).frame_status = CAP_BROKEN;
-            frame_packet.push_back(frame_data);
+            frame_packet.push_back(std::move(frame_data));
             continue;
         }
 
         // for the input buffer with the most recent timestamp simply get the rightmost frame
         if(cap_id == query_cap_id) {
             this->frame_buffers[cap_id]->pop(frame_data); // actually, this should not block and if it is empty an empty frame packet should be generated
-            frame_packet.push_back(frame_data);
+            frame_packet.push_back(std::move(frame_data));
             continue;
         }
 
@@ -202,7 +202,7 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
             if(!this->frame_buffers[cap_id]->front(frame_data_tmp)) {
                 frame_data = std::make_shared<FrameData>();
                 (*frame_data).frame_status = FRAME_DROPPED;
-                frame_packet.push_back(frame_data);
+                frame_packet.push_back(std::move(frame_data));
                 break;
             }
 
@@ -219,7 +219,7 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
                 frame_data = std::move(frame_data_tmp);
             }
             else {
-                frame_packet.push_back(frame_data);
+                frame_packet.push_back(std::move(frame_data));
                 break;
             }
         }
