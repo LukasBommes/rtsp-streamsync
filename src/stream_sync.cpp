@@ -340,6 +340,5 @@ void StreamSynchronizer::init(std::vector<const char*> cams,
 
 
 SSFramePacket StreamSynchronizer::get_frame_packet(void) {
-    std::cout << "Call to get_frame_packet(). Queue size: " << this->frame_packet_buffer->size() << std::endl;
     return this->frame_packet_buffer->pop();
 }
