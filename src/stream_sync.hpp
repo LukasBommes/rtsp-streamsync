@@ -19,7 +19,11 @@
 #include "../../video_cap/src/video_cap_validator.hpp"
 #include "exceptions.hpp"
 #include "shared_queue.hpp"
-#include "frame_packet_deque.hpp"
+
+typedef std::vector<std::unique_ptr<SharedQueue<std::shared_ptr<FrameData> > > > SSFrameBuffer;
+typedef std::vector<std::shared_ptr<FrameData> > SSFramePacket;
+
+#include "frame_packet_deque.hpp" // needs declaration of SSFramePacket type
 
 
 /*
@@ -42,10 +46,6 @@ struct FrameData {
     char frame_type[2];
     int frame_status;
 };
-
-
-typedef std::vector<std::unique_ptr<SharedQueue<std::shared_ptr<FrameData> > > > SSFrameBuffer;
-typedef std::vector<std::shared_ptr<FrameData> > SSFramePacket;
 
 
 /*
