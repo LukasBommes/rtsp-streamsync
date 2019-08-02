@@ -76,7 +76,7 @@ void StreamSynchronizer::read_frames(std::size_t cap_id) {
 
         // prevent access to the frame buffer during synchronization
         this->frame_buffers[cap_id]->push(std::move(frame_data));
-        std::cout << "Thread " << cap_id << " frame_buffer_size: " << this->frame_buffers[cap_id].size() << std::endl; 
+        std::cout << "Thread " << cap_id << " frame_buffer_size: " << this->frame_buffers[cap_id]->size() << std::endl; 
 
         // notify frame packet generator thread
         this->cv.notify_one();
