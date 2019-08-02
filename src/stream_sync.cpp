@@ -179,7 +179,8 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
     // loop over all other frame buffers
     for(std::size_t cap_id = 0; cap_id < this->frame_buffers.size(); cap_id++) {
 
-        std::shared_ptr<FrameData> frame_data, frame_data_tmp;
+        std::shared_ptr<FrameData> frame_data_tmp;
+        std::shared_ptr<FrameData> frame_data = std::make_shared<FrameData>();
         // make sure pointers are initialized, otherwise free below might fail in first iteration
         (*frame_data).frame = NULL;
         (*frame_data).motion_vectors = NULL;
@@ -187,7 +188,7 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
         // if cap is broken do not consider it during synchronization
         if(!this->caps[cap_id].is_valid()) {
             // since we do not retrieve any FrameData from buffer, we need to create an empty one first
-            frame_data = std::make_shared<FrameData>();
+            //frame_data = std::make_shared<FrameData>();
             (*frame_data).frame_status = CAP_BROKEN;
             frame_packet.push_back(std::move(frame_data));
             continue;
@@ -203,7 +204,7 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
         while(1) {
             // try to read out the front item
             if(!this->frame_buffers[cap_id]->front(frame_data_tmp)) {
-                frame_data = std::make_shared<FrameData>();
+                //frame_data = std::make_shared<FrameData>();
                 (*frame_data).frame_status = FRAME_DROPPED;
                 frame_packet.push_back(std::move(frame_data));
                 break;
