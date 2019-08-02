@@ -18,7 +18,7 @@ void StreamSynchronizer::open_cams(void) {
 
 void StreamSynchronizer::read_frames(std::size_t cap_id) {
     int errors = 0; // for error counting
-    //int step = 0; // for simulating breakdown
+    int step = 0; // for simulating breakdown
 
     while(1) {
         // if capture device is broken just idle
@@ -44,7 +44,7 @@ void StreamSynchronizer::read_frames(std::size_t cap_id) {
         bool success = this->caps[cap_id].read(&np_frame, &width, &height, frame_type, &motion_vectors, &num_mvs, &frame_timestamp);
 
         // simulate a breakdown
-        //if((cap_id == 4) && (step++ >= 400)) success = false;
+        if((cap_id == 4) && (step++ >= 400)) success = false;
 
         if (!success) {
             std::cerr << "Could not read the next frame from stream " << cap_id << "." << std::endl;
