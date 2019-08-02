@@ -18,7 +18,7 @@ void StreamSynchronizer::open_cams(void) {
 
 void StreamSynchronizer::read_frames(std::size_t cap_id) {
     int errors = 0; // for error counting
-    int step = 0; // for simulating breakdown
+    //int step = 0; // for simulating breakdown
 
     while(1) {
         // if capture device is broken just idle
@@ -44,7 +44,7 @@ void StreamSynchronizer::read_frames(std::size_t cap_id) {
         bool success = this->caps[cap_id].read(&np_frame, &width, &height, frame_type, &motion_vectors, &num_mvs, &frame_timestamp);
 
         // simulate a breakdown
-        if((cap_id == 4) && (step++ >= 400)) success = false;
+        //if((cap_id == 4) && (step++ >= 400)) success = false;
 
         if (!success) {
             std::cerr << "Could not read the next frame from stream " << cap_id << "." << std::endl;
@@ -187,7 +187,6 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
 
         // if cap is broken do not consider it during synchronization
         if(!this->caps[cap_id].is_valid()) {
-            // since we do not retrieve any FrameData from buffer, we need to create an empty one first
             (*frame_data).frame_status = CAP_BROKEN;
             frame_packet.push_back(std::move(frame_data));
             continue;
@@ -195,7 +194,7 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
 
         // for the input buffer with the most recent timestamp simply get the rightmost frame
         if(cap_id == query_cap_id) {
-            this->frame_buffers[cap_id]->pop(frame_data); // actually, this should not block and if it is empty an empty frame packet should be generated
+            this->frame_buffers[cap_id]->pop(frame_data);
             frame_packet.push_back(std::move(frame_data));
             continue;
         }

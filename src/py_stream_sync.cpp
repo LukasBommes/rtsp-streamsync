@@ -16,6 +16,7 @@ StreamSynchronizer_init(StreamSynchronizerObject *self, PyObject *args, PyObject
     static char *kwlist[] = {"cams_list",
                              "max_initial_stream_offset",
                              "max_read_errors",
+                             "frame_packet_buffer_maxsize",
                              NULL};
 
     // list of camera dictionaries passed as argument
@@ -24,13 +25,14 @@ StreamSynchronizer_init(StreamSynchronizerObject *self, PyObject *args, PyObject
     // optional arguments
     double max_initial_stream_offset = 30.0;
     int max_read_errors = 3.0;
+    int frame_packet_buffer_maxsize = 1;
 
     std::vector<const char*> cams; // vector of camera connection urls
 
     // parse camera list argument
-    if(!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|$di", kwlist,
+    if(!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|$dii", kwlist,
         &PyList_Type, &cams_list, &max_initial_stream_offset,
-        &max_read_errors))
+        &max_read_errors, &frame_packet_buffer_maxsize))
         return -1;
 
     int num_cams = PyList_Size(cams_list);
@@ -48,7 +50,8 @@ StreamSynchronizer_init(StreamSynchronizerObject *self, PyObject *args, PyObject
         cams.push_back(cam_source_str);
     }
 
-    self->stream_synchronizer.init(cams, max_initial_stream_offset, max_read_errors);
+    self->stream_synchronizer.init(cams, max_initial_stream_offset,
+        max_read_errors, frame_packet_buffer_maxsize);
 
     return 0;
 }

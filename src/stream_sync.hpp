@@ -105,7 +105,8 @@ public:
     /* overloaded constructor */
     StreamSynchronizer(std::vector<const char*> cams,
         double max_initial_stream_offset = 30.0,
-        int max_read_errors = 3);
+        int max_read_errors = 3,
+        int frame_packet_buffer_maxsize = 1);
 
     /* destructor */
     ~StreamSynchronizer();
@@ -113,7 +114,8 @@ public:
     /* initialization method called by the constructor (needed for Python C API) */
     void init(std::vector<const char*> cams,
         double max_initial_stream_offset,
-        int max_read_errors);
+        int max_read_errors,
+        int frame_packet_buffer_maxsize);
 
     /* Retrieve the next synchronized frame packet if available, otherwise block */
     SSFramePacket get_frame_packet(void);
