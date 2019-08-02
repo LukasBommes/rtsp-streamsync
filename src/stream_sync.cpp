@@ -272,7 +272,7 @@ void StreamSynchronizer::generate_frame_packets(void) {
             total_size += s;
             std::cout << s << " | ";
         }
-        std::cout << " | total = " << total_size << std::endl;
+        std::cout << "total = " << total_size << std::endl;
 
         // wait until all of the (valid) buffers has an element
         std::unique_lock<std::mutex> lk(this->frame_buffer_mutex);
