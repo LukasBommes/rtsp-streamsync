@@ -20,12 +20,6 @@
 #include "exceptions.hpp"
 #include "shared_queue.hpp"
 
-typedef std::vector<std::unique_ptr<SharedQueue<std::shared_ptr<FrameData> > > > SSFrameBuffer;
-typedef std::vector<std::shared_ptr<FrameData> > SSFramePacket;
-
-#include "frame_packet_deque.hpp" // needs declaration of SSFramePacket type
-
-
 /*
 *    Combines video frame, motion vectors, timestamp and other data read from the streams
 *
@@ -46,6 +40,11 @@ struct FrameData {
     char frame_type[2];
     int frame_status;
 };
+
+typedef std::vector<std::unique_ptr<SharedQueue<std::shared_ptr<FrameData> > > > SSFrameBuffer;
+typedef std::vector<std::shared_ptr<FrameData> > SSFramePacket;
+
+#include "frame_packet_deque.hpp" // needs declaration of SSFramePacket type
 
 
 /*
