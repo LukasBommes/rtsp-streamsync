@@ -76,7 +76,6 @@ void StreamSynchronizer::read_frames(std::size_t cap_id) {
 
         // prevent access to the frame buffer during synchronization
         this->frame_buffers[cap_id]->push(std::move(frame_data));
-        std::cout << "Thread " << cap_id << " frame_buffer_size: " << this->frame_buffers[cap_id]->size() << std::endl; 
 
         // notify frame packet generator thread
         this->cv.notify_one();
@@ -264,6 +263,16 @@ void StreamSynchronizer::generate_frame_packets(void) {
 
     // continuously generate new synchronized frame packets and put them in the output buffer
     while(1) {
+
+        // print buffer sizes
+        std::size_t total_size = 0;
+        std::cout << "Frame buffer sizes: ";
+        for(std::size_t cap_id = 0; cap_id < this->frame_buffers.size(); cap_id++) {
+            std::size_t s = this->frame_buffers[cap_id]->size();
+            total_size += s;
+            std::cout << s << " | ";
+        }
+        std::cout << " | total = " << total_size << std::endl;
 
         // wait until all of the (valid) buffers has an element
         std::unique_lock<std::mutex> lk(this->frame_buffer_mutex);
