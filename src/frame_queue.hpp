@@ -9,7 +9,7 @@ class FrameQueue
 {
  public:
 
-  std::shared_ptr<FrameData> pop(free=false)
+  std::shared_ptr<FrameData> pop(bool free_mem=false)
   {
     std::unique_lock<std::mutex> mlock(mutex_);
     while (queue_.empty())
@@ -17,7 +17,7 @@ class FrameQueue
       cond_.wait(mlock);
     }
     std::shared_ptr<FrameData> frame_data = queue_.front();
-    if (free) {
+    if (free_mem) {
         free((*frame_data).frame);
         free((*frame_data).motion_vectors);
     }
@@ -25,7 +25,7 @@ class FrameQueue
     return frame_data;
   }
 
-  void pop(std::shared_ptr<FrameData>& frame_data, free=false)
+  void pop(std::shared_ptr<FrameData>& frame_data, bool free_mem=false)
   {
     std::unique_lock<std::mutex> mlock(mutex_);
     while (queue_.empty())
@@ -33,7 +33,7 @@ class FrameQueue
       cond_.wait(mlock);
     }
     frame_data = queue_.front();
-    if (free) {
+    if (free_mem) {
         free((*frame_data).frame);
         free((*frame_data).motion_vectors);
     }
