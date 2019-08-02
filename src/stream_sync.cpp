@@ -269,14 +269,14 @@ void StreamSynchronizer::generate_frame_packets(void) {
     while(1) {
 
         // print buffer sizes
-        std::size_t total_size = 0;
-        std::cout << "Frame buffer sizes: ";
-        for(std::size_t cap_id = 0; cap_id < this->frame_buffers.size(); cap_id++) {
-            std::size_t s = this->frame_buffers[cap_id]->size();
-            total_size += s;
-            std::cout << s << " | ";
-        }
-        std::cout << "total = " << total_size << std::endl;
+        // std::size_t total_size = 0;
+        // std::cout << "Frame buffer sizes: ";
+        // for(std::size_t cap_id = 0; cap_id < this->frame_buffers.size(); cap_id++) {
+        //     std::size_t s = this->frame_buffers[cap_id]->size();
+        //     total_size += s;
+        //     std::cout << s << " | ";
+        // }
+        // std::cout << "total = " << total_size << std::endl;
 
         // wait until all of the (valid) buffers has an element
         std::unique_lock<std::mutex> lk(this->frame_buffer_mutex);
