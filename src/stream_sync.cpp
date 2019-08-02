@@ -323,13 +323,14 @@ StreamSynchronizer::~StreamSynchronizer() {
 
 void StreamSynchronizer::init(std::vector<const char*> cams,
     double max_initial_stream_offset,
-    int max_read_errors) {
+    int max_read_errors,
+    int frame_packet_buffer_maxsize) {
 
     this->cams = cams;
     this->max_initial_stream_offset = max_initial_stream_offset;
     this->max_read_errors = max_read_errors;
 
-    this->frame_packet_buffer = std::make_unique<FramePacketDeque>(1);
+    this->frame_packet_buffer = std::make_unique<FramePacketDeque>(frame_packet_buffer_maxsize);
 
     this->open_cams();
 
