@@ -19,7 +19,7 @@
 #include "../../video_cap/src/video_cap_validator.hpp"
 #include "exceptions.hpp"
 #include "shared_queue.hpp"
-#include "ring_buffer.hpp"
+#include "frame_packet_deque.hpp"
 
 
 /*
@@ -65,7 +65,7 @@ private:
     std::vector<VideoCapWithValidator> caps;
     std::vector<std::thread> threads;
     SSFrameBuffer frame_buffers;
-    std::unique_ptr<RingBuffer<SSFramePacket> > frame_packet_buffer;
+    std::unique_ptr<FramePacketDeque> frame_packet_buffer;
 
     /* for frame buffer rate control */
     std::condition_variable cv;

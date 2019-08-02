@@ -4,7 +4,7 @@
 #include <condition_variable>
 
 
-/** Thread-safe ring buffer
+/** Thread-safe ring buffer for SSFramePacket
 *
 *  A ring buffer implementation based on std::deque. Pop() retrieves a new item
 *  from the deque front (oldest item) and blocks if the deque is empty. If no
@@ -16,14 +16,13 @@
 *   @param maxsize If <= 0 (default) do not limit the size of the deque. If > 0
 *       allow the deque to reach at most this size.
 */
-template <typename T>
-class RingBuffer {
+class FramePacketDeque {
 public:
-    RingBuffer(std::size_t maxsize=-1) {
+    FramePacketDeque(std::size_t maxsize=-1) {
         this->maxsize = maxsize;
     }
 
-    T pop() {
+    SSFramePacket pop() {
         std::unique_lock<std::mutex> mlock(this->mutex_);
         while (this->deque_.empty())
         {
@@ -34,7 +33,7 @@ public:
         return item;
     }
 
-    void pop(T& item) {
+    void pop(SSFramePacket& item) {
         std::unique_lock<std::mutex> mlock(this->mutex_);
         while (this->deque_.empty())
         {
@@ -44,7 +43,7 @@ public:
         this->deque_.pop_front();
     }
 
-    void push(const T& item) {
+    void push(const SSFramePacket& item) {
         std::unique_lock<std::mutex> mlock(this->mutex_);
         if (this->maxsize > 0 && (this->deque_.size() == this->maxsize)) { // deque is full
             this->deque_.pop_front();
@@ -54,7 +53,7 @@ public:
         this->cond_.notify_one();
     }
 
-    void push(T&& item) {
+    void push(SSFramePacket&& item) {
         std::unique_lock<std::mutex> mlock(this->mutex_);
         if (this->maxsize > 0 && (this->deque_.size() == this->maxsize)) { // deque is full
             this->deque_.pop_front();
@@ -74,7 +73,7 @@ public:
 
 private:
     std::size_t maxsize;
-    std::deque<T> deque_;
+    std::deque<SSFramePacket> deque_;
     std::mutex mutex_;
     std::condition_variable cond_;
 };

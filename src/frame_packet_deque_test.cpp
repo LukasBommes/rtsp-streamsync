@@ -1,8 +1,8 @@
-// g++ ring_buffer_test.cpp -lpthread
+// g++ frame_packet_deque_test.cpp -lpthread
 #include <iostream>
 #include <thread>
 #include <chrono>
-#include "ring_buffer.hpp"
+#include "frame_packet_deque.hpp"
 
 
 RingBuffer<uint64_t> queue(1);

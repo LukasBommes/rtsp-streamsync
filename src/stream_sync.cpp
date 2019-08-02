@@ -315,7 +315,7 @@ void StreamSynchronizer::init(std::vector<const char*> cams,
     this->max_initial_stream_offset = max_initial_stream_offset;
     this->max_read_errors = max_read_errors;
 
-    this->frame_packet_buffer = std::make_unique<RingBuffer<SSFramePacket> >(1);
+    this->frame_packet_buffer = std::make_unique<FramePacketDeque>(1);
 
     this->open_cams();
 
