@@ -80,7 +80,7 @@ class FrameQueue
   }
 
  private:
-  std::queue<T> queue_;
+  std::queue<std::shared_ptr<FrameData>> queue_;
   std::mutex mutex_;
   std::condition_variable cond_;
 };
