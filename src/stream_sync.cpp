@@ -302,9 +302,11 @@ void StreamSynchronizer::generate_frame_packets(void) {
 
 StreamSynchronizer::StreamSynchronizer(std::vector<const char*> cams,
     double max_initial_stream_offset,
-    int max_read_errors) {
+    int max_read_errors,
+    int frame_packet_buffer_maxsize) {
 
-    this->init(cams, max_initial_stream_offset, max_read_errors);
+    this->init(cams, max_initial_stream_offset, max_read_errors,
+        frame_packet_buffer_maxsize);
 }
 
 
