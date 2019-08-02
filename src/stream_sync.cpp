@@ -209,7 +209,7 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
             // if the frame is invalid it has no timestamp for
             // synchronization, so just remove it from the buffer
             if((*frame_data_tmp).frame_status != FRAME_OKAY) {
-                this->frame_buffers[cap_id]->pop(true); // pop item and free allocated memory
+                this->frame_buffers[cap_id]->pop();
                 break;
             }
 
