@@ -215,6 +215,9 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
 
             // if the frame is valid remove items from the buffer until it's timestamp matches the query timestamp
             if((*frame_data_tmp).timestamp <= query_timestamp) { // the "=" is important in case the timestamp is identical to the query timestamp
+                // free memory of frame_data from previous iteration
+                free((*frame_data).frame);
+                free((*frame_data).motion_vectors);        
                 this->frame_buffers[cap_id]->pop();  // remove item from the input buffer and free memory
                 frame_data = std::move(frame_data_tmp);
             }
