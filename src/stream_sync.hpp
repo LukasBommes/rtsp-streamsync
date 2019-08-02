@@ -18,7 +18,6 @@
 
 #include "../../video_cap/src/video_cap_validator.hpp"
 #include "exceptions.hpp"
-#include "shared_queue.hpp"
 
 /*
 *    Combines video frame, motion vectors, timestamp and other data read from the streams
@@ -41,10 +40,14 @@ struct FrameData {
     int frame_status;
 };
 
-typedef std::vector<std::unique_ptr<SharedQueue<std::shared_ptr<FrameData> > > > SSFrameBuffer;
 typedef std::vector<std::shared_ptr<FrameData> > SSFramePacket;
 
-#include "frame_packet_deque.hpp" // needs declaration of SSFramePacket type
+// need FrameData and SSFramePacket type
+#include "frame_packet_deque.hpp"
+#include "frame_queue.hpp"
+
+//typedef std::vector<std::unique_ptr<SharedQueue<std::shared_ptr<FrameData> > > > SSFrameBuffer;
+typedef std::vector<std::unique_ptr<FrameQueue> > SSFrameBuffer;
 
 
 /*

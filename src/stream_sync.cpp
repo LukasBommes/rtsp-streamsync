@@ -331,7 +331,7 @@ void StreamSynchronizer::init(std::vector<const char*> cams,
 
     // create frame buffers
     for(std::size_t i = 0; i < this->caps.size(); i++) {
-        std::unique_ptr<SharedQueue<std::shared_ptr<FrameData> > > frame_buffer = std::make_unique<SharedQueue<std::shared_ptr<FrameData> > >();
+        std::unique_ptr<FrameQueue> frame_buffer = std::make_unique<FrameQueue>();
         this->frame_buffers.push_back(std::move(frame_buffer));
     }
 
