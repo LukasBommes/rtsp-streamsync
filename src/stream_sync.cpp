@@ -181,14 +181,13 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
 
         std::shared_ptr<FrameData> frame_data_tmp;
         std::shared_ptr<FrameData> frame_data = std::make_shared<FrameData>();
-        // make sure pointers are initialized, otherwise free below might fail in first iteration
+        // initialize pointers so free below is well-defined on first iteration
         (*frame_data).frame = NULL;
         (*frame_data).motion_vectors = NULL;
 
         // if cap is broken do not consider it during synchronization
         if(!this->caps[cap_id].is_valid()) {
             // since we do not retrieve any FrameData from buffer, we need to create an empty one first
-            //frame_data = std::make_shared<FrameData>();
             (*frame_data).frame_status = CAP_BROKEN;
             frame_packet.push_back(std::move(frame_data));
             continue;
@@ -204,7 +203,6 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
         while(1) {
             // try to read out the front item
             if(!this->frame_buffers[cap_id]->front(frame_data_tmp)) {
-                //frame_data = std::make_shared<FrameData>();
                 (*frame_data).frame_status = FRAME_DROPPED;
                 frame_packet.push_back(std::move(frame_data));
                 break;
@@ -338,7 +336,7 @@ void StreamSynchronizer::init(std::vector<const char*> cams,
 
     // create frame buffers
     for(std::size_t i = 0; i < this->caps.size(); i++) {
-        std::unique_ptr<FrameQueue> frame_buffer = std::make_unique<FrameQueue>();
+        std::unique_ptr<SharedQueue<std::shared_ptr<FrameData> > > frame_buffer = std::make_unique<SharedQueue<std::shared_ptr<FrameData> > >();
         this->frame_buffers.push_back(std::move(frame_buffer));
     }
 
