@@ -1,4 +1,4 @@
-// gcc src/video_cap/time_cvt.cpp src/stream_sync/stream_sync.cpp src/stream_sync/stream_sync_test.cpp src/video_cap/video_cap.cpp `pkg-config --cflags --libs libavformat libswscale opencv4` --std=c++17
+// gcc ../video_cap/src/time_cvt.cpp src/stream_sync.cpp src/stream_sync_test.cpp ../video_cap/src/video_cap.cpp `pkg-config --cflags --libs libavformat libswscale opencv4` --std=c++17
 
 #include "stream_sync.hpp"
 

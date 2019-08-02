@@ -98,7 +98,7 @@ if __name__ == "__main__":
 
             max_dts.append(np.max(timestamps) - np.min(timestamps))
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(1000) & 0xFF == ord('q'):
                break
 
         finalize()
