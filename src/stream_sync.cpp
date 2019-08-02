@@ -180,6 +180,9 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
     for(std::size_t cap_id = 0; cap_id < this->frame_buffers.size(); cap_id++) {
 
         std::shared_ptr<FrameData> frame_data, frame_data_tmp;
+        // make sure pointers are initialized, otherwise free below might fail in first iteration
+        (*frame_data).frame = NULL;
+        (*frame_data).motion_vectors = NULL;
 
         // if cap is broken do not consider it during synchronization
         if(!this->caps[cap_id].is_valid()) {
@@ -217,7 +220,7 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
             if((*frame_data_tmp).timestamp <= query_timestamp) { // the "=" is important in case the timestamp is identical to the query timestamp
                 // free memory of frame_data from previous iteration
                 free((*frame_data).frame);
-                free((*frame_data).motion_vectors);        
+                free((*frame_data).motion_vectors);
                 this->frame_buffers[cap_id]->pop();  // remove item from the input buffer and free memory
                 frame_data = std::move(frame_data_tmp);
             }
