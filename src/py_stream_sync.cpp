@@ -84,7 +84,18 @@ StreamSynchronizer_get_frame_packet(StreamSynchronizerObject *self, PyObject *Py
             Py_RETURN_NONE;
 
         // insert frame status into frame data dict
-        PyObject *frame_status = PyLong_FromLong(frame_packet[cap_id]->frame_status);
+        if (frame_packet[cap_id]->frame_status == FRAME_OKAY) {
+            PyObject *frame_status = PyUnicode_FromString("FRAME_OKAY");
+        }
+        else if (frame_packet[cap_id]->frame_status == FRAME_DROPPED) {
+            PyObject *frame_status = PyUnicode_FromString("FRAME_DROPPED");
+        }
+        else if (frame_packet[cap_id]->frame_status == FRAME_READ_ERROR) {
+            PyObject *frame_status = PyUnicode_FromString("FRAME_READ_ERROR");
+        }
+        else if (frame_packet[cap_id]->frame_status == CAP_BROKEN) {
+            PyObject *frame_status = PyUnicode_FromString("CAP_BROKEN");
+        }
         ret = PyDict_SetItemString(frame_data_dict, "frame_status", frame_status);
         if(!frame_status || ret < 0)
             Py_RETURN_NONE;
