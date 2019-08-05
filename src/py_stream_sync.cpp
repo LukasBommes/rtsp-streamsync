@@ -24,7 +24,7 @@ StreamSynchronizer_init(StreamSynchronizerObject *self, PyObject *args, PyObject
 
     // optional arguments
     double max_initial_stream_offset = 30.0;
-    int max_read_errors = 3.0;
+    int max_read_errors = 3;
     int frame_packet_buffer_maxsize = 1;
 
     std::vector<const char*> cams; // vector of camera connection urls
