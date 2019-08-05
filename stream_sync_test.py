@@ -96,7 +96,10 @@ if __name__ == "__main__":
 
                 cv2.imshow("camera_{}".format(cap_id), frame_data["frame"])
 
-            max_dts.append(np.max(timestamps) - np.min(timestamps))
+            try:
+                max_dts.append(np.max(timestamps) - np.min(timestamps))
+            except ValueError:
+                pass
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                break
