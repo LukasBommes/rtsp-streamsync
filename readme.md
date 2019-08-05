@@ -56,7 +56,7 @@ apt-get update && apt-get install -y git
 Clone the git repository for the H.264 Video Capture and run the installer script for installing dependencies
 ```
 mkdir -p /home && cd home && \
-git clone https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/h264-videocap.git video_cap && \
+git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/h264-videocap.git video_cap && \
 cd video_cap && \
 chmod +x install.sh && \
 ./install.sh
