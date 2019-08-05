@@ -138,7 +138,7 @@ CMD ["sh", "-c", "tail -f /dev/null"]
 | Methods | Description |
 | --- | --- |
 | StreamSynchronizer() | Constructor |
-| get_frame_packet() | Open a video file or url |
+| get_frame_packet() | Retrieve the next synchronized frame packet |
 
 ##### Method :: StreamSynchronizer()
 
