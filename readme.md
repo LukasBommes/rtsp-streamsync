@@ -231,6 +231,11 @@ The algorithm is equipped with capabilities to handle different kinds of errors:
 
 ##### Performance Benchmark
 
+Frame packets are generated from 7 parallel video streams of IP surveillance cameras
+running at a rate of at 15 Hz with an initial maximum stream offset of 28.7 seconds. Maximum
+interpacket time delta of N = 1005 frame packets is 50.5 ms ±15 ms which is less than the display
+time of an individual frame (1/15 s).
+
 
 ## About
 
