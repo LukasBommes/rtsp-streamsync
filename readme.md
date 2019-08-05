@@ -72,7 +72,7 @@ cd /home/video_cap && python3 setup.py install
 ```
 Now, clone the Stream-Synchronizer repository
 ```
-cd /home && git clone https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/sfmt-streamsync.git stream_sync && \
+cd /home && git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/sfmt-streamsync.git stream_sync && \
 ```
 Build sources and install python wrapper
 ```
@@ -121,7 +121,7 @@ RUN cd $HOME/video_cap && \
 
 # Build stream-sync from source
 RUN cd $HOME && \
-  git clone https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/sfmt-streamsync.git stream_sync && \
+  git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/sfmt-streamsync.git stream_sync && \
   cd $HOME/stream_sync && \
   python3 setup.py install
 
