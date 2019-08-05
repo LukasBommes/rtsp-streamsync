@@ -207,7 +207,7 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
                 break;
             }*/
             // get frame from buffer front (it is guaranteed that a frame is available)
-            this->frame_buffers[cap_id]->front(frame_data_tmp)
+            this->frame_buffers[cap_id]->front(frame_data_tmp);
 
             // if the frame is invalid it has no timestamp for
             // synchronization, so just remove it from the buffer
