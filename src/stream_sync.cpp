@@ -201,11 +201,13 @@ SSFramePacket StreamSynchronizer::assemble_frame_packet(double query_timestamp, 
 
         while(1) {
             // try to read out the front item
-            if(!this->frame_buffers[cap_id]->front(frame_data_tmp)) {
+            /*if(!this->frame_buffers[cap_id]->front(frame_data_tmp)) {
                 (*frame_data).frame_status = FRAME_DROPPED;
                 frame_packet.push_back(std::move(frame_data));
                 break;
-            }
+            }*/
+            // get frame from buffer front (it is guaranteed that a frame is available)
+            this->frame_buffers[cap_id]->front(frame_data_tmp)
 
             // if the frame is invalid it has no timestamp for
             // synchronization, so just remove it from the buffer

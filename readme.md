@@ -6,6 +6,10 @@ Synchronization is needed for some applications, for example visual object track
 
 A usage example can be found in `stream_sync_test.py`.
 
+Important Limitations:
+- Can only be used with RTSP streams of senders which generate RTCP sender reports, e.g. ONVIF compatible IP cameras.
+- All cameras need to run at the same frame rate.
+
 ## Quickstart
 
 A Dockerfile is provided that sets up the environment and allows to run a test script for the Stream-Synchronizer.
@@ -28,7 +32,7 @@ Edit the camera source URLs in `stream_sync_test.py` to match those of your IP c
 ```
 python3 stream_sync_test.py
 ```
-If everything works well, a graphics window showing the live stream for each camera should pop up. The streams within these windows should be synchronized which can be validated easily if the frame timestamps are shown as overlays on the video (see image below). Most IP cameras provide an option for this.
+If everything works well, a graphics window showing the live stream for each camera should pop up. The streams within these windows should be synchronized which can be validated easily if the frame timestamps are shown as overlays on the video (see fig. 1 and fig. 2). Most IP cameras provide an option for this.
 
 <center>
 <img src="imgs/example_output_2.png" alt="example_output_gui" width="500"/><br>
@@ -145,7 +149,7 @@ Constructor.
 | cams | list of dict | Each list entry represents one IP camera and must have at least the key "source" and a RTSP stream URL, such as "rtsp://xxx.xxx.xxx.xxx:554", as a value. The synchronizer is designed for RTSP streams. Opening of video files will work, but leads to undesired behaviour. |
 | max_initial_stream_offset | double | If the initial temporal offset between any of the video streams is larger than this threshold a StreamProcessingError is thrown and the program halts. |
 | max_read_errors | int | If more subsequent frame reads than specified by this value fail, the stream status is changed and all subsequent frames from this stream will have status "CAP_BROKEN". |
-| frame_packet_buffer_maxsize | int | The generated synchronized frame packets are put into an output buffer with this maximum size. If frame packets are generated at a faster rate than they are consumed, the oldest packet in the buffer is overwritten. |
+| frame_packet_buffer_maxsize | int | The generated synchronized frame packets are put into an output buffer with this maximum size. If frame packets are generated at a faster rate than they are consumed, the oldest packet in the buffer is overwritten. If set to -1, then the frame packet buffer can grow unlimited.|
 
 ##### Method :: get_frame_packet()
 
@@ -168,18 +172,64 @@ The integer keys refer to the camera ID of the stream and the frame_data sub-dic
 For an explanation of motion vectors and frame types refer to the documentation of the [H.264 Video Capture Class](https://github.com/LukasBommes/sfmt-videocap).
 
 
-## Algorithm Overview
+## Algorithm Explanation
 
+##### Overview
 
+Fig. 3 shows the overall architecture of the stream synchronization. The sender side consists of multiple IP cameras which are synchronized via NTP to a common reference time (UTC). Streams are transmitted to the receiver over network via Real Time Streaming Protocol (RTSP). The H.264 Video Capture module is used to read and decode frames from the streams and estimate UTC timestamps for each frame. For each stream an individual FIFO queue is used to buffer frames and timestamps. In regular intervals, an algorithm is scheduled that removes the relative offset between the streams. Once the offset is removed, a frame is taken from each buffer and put into a packet. Frames inside a frame packet have very similar timestamps which means they were taken at the same point in time.
 
 <center>
 <img src="imgs/framework.png" alt="stream_sync_framework" width="300"/><br>
 <p>Fig. 3 - Overview of the synchronization algorithm of the Stream-Synchronizer.</p>
 </center>
 
+##### Frame Timestamp Estimation
 
-- initial synchronization error
-- handling of broken or lost frames
+Every frame is time stamped with the current UTC time when sent out by the IP camera. Estimation of this timestamp is done by the H.264 Video Capture module and described in its [documentation](https://github.com/LukasBommes/sfmt-videocap).
+
+##### Initial Offset Check
+
+Before the synchronization algorithms starts, the maximum initial stream offset between all streams is estimated by collecting one frame per stream and comparing their timestamps. If the estimated offset is larger than the value specified in `max_initial_stream_offset`, an error is thrown and the program halts.
+
+##### Stream Offset Compensation
+
+To create the next synchronized frame packet the following steps are performed:
+
+1. Wait for all buffers to have `>= 1` frame<br>
+<img src="imgs/step_0.png" alt="stream_offset_compensation_0" width="200"/><br>
+
+2. Find most recent timestamp `T_q` at buffer fronts<br>
+<img src="imgs/step_1.png" alt="stream_offset_compensation_1" width="200"/><br>
+
+3. Wait until all buffers have a frame with timestamp `T >= T_q`<br>
+<img src="imgs/step_2.png" alt="stream_offset_compensation_2" width="200"/><br>
+
+4. Pop all frames with timestamps `T < T_q` from buffer fronts, remember last popped frame<br>
+<img src="imgs/step_3.png" alt="stream_offset_compensation_3" width="200"/><br>
+
+5. Make a packet of the last popped frames<br>
+<img src="imgs/step_4.png" alt="stream_offset_compensation_4" width="200"/><br>
+
+The frame packet is then enqueued in the output buffer and can be used in another thread.
+
+Step 3 make sure that the buffer levels stay constant and that almost every frame in the buffers gets processed after the very first synchronization is performed.  
+
+##### Frame Packet Buffer
+
+Stream offset compensation runs as fast as frames are enqueued in the frame buffers. E.g. if the cameras run at 15 Hz, then the stream offset generation generates ~ 15 frame packets per second. Packets are enqueued in the frame packet buffer and can be retrieved by calling the `get_frame_packet()` method. Depending on the `frame_packet_buffer_maxsize` parameter the output buffer is limited in size or can grow unlimited. In both cases `get_frame_packet()` blocks until at least one frame packet is available. Thus, it is best practice to simply call `get_frame_packet()` as fast as possible.
+
+If processing of packets is slower than packet generation, it is recommended to limit the maximum size of the buffer. In this case it acts a ring buffer and the oldest packets are overwritten as soon as a newer packet is available. In this case `get_frame_packet()` always returns the most recent frame packet.
+
+##### Error Handling
+
+The algorithm is equipped with capabilities to handle different kinds of errors:
+
+- **Frame read error:** If reading of the next frame from a stream fails, e.g. because of a connection loss, a frame with status "FRAME_READ_ERROR" is enqueued in the frame buffer. If more then `max_read_errors` occur subsequently, the stream is deactivated and subsequent frames from this stream have status "CAP_BROKEN".
+
+- **Camera connection loss:** If the provided stream URL can not be opened or too many subsequent read error occured, the stream produces frames with status "CAP_BROKEN".
+
+
+##### Performance Benchmark
 
 
 ## About
