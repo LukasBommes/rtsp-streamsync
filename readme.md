@@ -6,7 +6,9 @@ A usage example can be found in `stream_sync_test.py`.
 
 ## Quickstart
 
-Stream-Synchronizer depends on the [H.264 Motion Vector Capture](https://github.com/LukasBommes/sfmt-videocap) library. The latest stable version is automatically pulled and installed in the provided Dockerfile.
+A Dockerfile is provided that sets up the environment and allows to run a test script for the Stream-Synchronizer.
+
+Stream-Synchronizer depends on the [H.264 Motion Vector Capture](https://github.com/LukasBommes/sfmt-videocap) library which is automatically pulled and installed in the provided Dockerfile.
 
 To install the sfmt-streamsync module simply build the Docker image with
 ```
@@ -26,6 +28,7 @@ python3 stream_sync_test.py
 ```
 If everything works well, a graphics window showing the live stream for each camera should pop up. The streams within these windows should be synchronized which can be validated easily if the frame timestamps are shown as overlays on the video. Most IP cameras provide an option for this.
 
+## Installation
 
 ## Python API
 

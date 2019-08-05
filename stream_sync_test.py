@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
                 print("cap_id:", cap_id, "| frame_status", frame_data["frame_status"], end=" ")
                 # show frame only if it is valid
-                if frame_data["frame_status"] != 0:
+                if frame_data["frame_status"] != "FRAME_OKAY":
                     print()
                     continue
 
@@ -96,10 +96,7 @@ if __name__ == "__main__":
 
                 cv2.imshow("camera_{}".format(cap_id), frame_data["frame"])
 
-            try:
-                max_dts.append(np.max(timestamps) - np.min(timestamps))
-            except ValueError:
-                pass
+            max_dts.append(np.max(timestamps) - np.min(timestamps))
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                break
