@@ -228,6 +228,8 @@ The algorithm is equipped with capabilities to handle different kinds of errors:
 
 - **Camera connection loss:** If the provided stream URL can not be opened or too many subsequent read error occured, the stream produces frames with status "CAP_BROKEN".
 
+- **Frame buffer underrun:** If during the offset computation any of the frame buffers gets exhausted (becomes empty), a frame with status "FRAME_DROPPED" is inserted in the frame packet.
+
 
 ##### Performance Benchmark
 
