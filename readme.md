@@ -56,7 +56,7 @@ apt-get update && apt-get install -y git
 Clone the git repository for the mv-extractor-legacy and run the installer script for installing dependencies
 ```
 mkdir -p /home && cd home && \
-git clone https://github.com/LukasBommes/mv-extractor-legacy.git video_cap && \
+git clone -b v0.0.0 https://github.com/LukasBommes/mv-extractor-legacy.git video_cap && \
 cd video_cap && \
 chmod +x install.sh && \
 ./install.sh
@@ -101,7 +101,7 @@ RUN apt-get update && \
 
 # Build h264-videocap from source
 RUN cd $HOME && \
-  git clone https://github.com/LukasBommes/mv-extractor-legacy.git video_cap && \
+  git clone -b v0.0.0 https://github.com/LukasBommes/mv-extractor-legacy.git video_cap && \
   cd video_cap && \
   chmod +x install.sh && \
   ./install.sh
