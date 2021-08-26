@@ -1,6 +1,6 @@
-# Video Stream Synchronizer
+# RTSP Video Stream Synchronizer
 
-Stream-Synchronizer is a C++/Python library for synchronized retrieval of video frames from multiple IP network cameras (via Real Time Streaming Protocol). A call to the provided `get_frame_packet()` method yields a packet containing one video frame per camera. These frames are guaranteed to have been captured at approximately the same wall time, thus representing the scene at the same point in time.
+RTSP Video Stream Synchronizer is a C++/Python library for synchronized retrieval of video frames from multiple IP network cameras (via Real Time Streaming Protocol). A call to the provided `get_frame_packet()` method yields a packet containing one video frame per camera. These frames are guaranteed to have been captured at approximately the same wall time, thus representing the scene at the same point in time.
 
 Synchronization is needed for some applications, for example visual object tracking or people counting in multi-camera environments.
 
@@ -12,9 +12,9 @@ Important Limitations:
 
 ## Quickstart
 
-A Dockerfile is provided that sets up the environment and allows to run a test script for the Stream-Synchronizer.
+A Dockerfile is provided that sets up the environment and allows to run a test script for the RTSP Video Stream Synchronizer.
 
-Stream-Synchronizer depends on the [H.264 Motion Vector Capture](https://github.com/LukasBommes/sfmt-videocap) library which is automatically pulled and installed in the provided Dockerfile.
+RTSP Video Stream Synchronizer depends on the [mv-extractor-legacy](https://github.com/LukasBommes/mv-extractor-legacy) library which is automatically pulled and installed in the provided Dockerfile.
 
 To install the sfmt-streamsync module simply build the Docker image with
 ```
@@ -44,7 +44,7 @@ If everything works well, a graphics window showing the live stream for each cam
 
 ## Installation
 
-If you plan to use the sfmt-streamsync module in your own project, you can install it by cloning the repo and building the source as described below.
+If you plan to use the rtsp-streamsync module in your own project, you can install it by cloning the repo and building the source as described below.
 
 <details>
   <summary>Installation on host (Ubuntu 18.04)</summary>
@@ -53,10 +53,10 @@ Install git
 ```
 apt-get update && apt-get install -y git
 ```
-Clone the git repository for the H.264 Video Capture and run the installer script for installing dependencies
+Clone the git repository for the mv-extractor-legacy and run the installer script for installing dependencies
 ```
 mkdir -p /home && cd home && \
-git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/h264-videocap.git video_cap && \
+git clone -b "v1.0.0" https://github.com/LukasBommes/mv-extractor-legacy.git video_cap && \
 cd video_cap && \
 chmod +x install.sh && \
 ./install.sh
@@ -66,13 +66,13 @@ Set environment variables (to permanently store them, append to `~/.profile` and
 export PATH="$PATH:$/home/bin"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/home/ffmpeg_build/lib/pkgconfig"
 ```
-Compile the source for H.264 Video Capture and make the python wrapper
+Compile the source for mv-extractor-legacy and make the python wrapper
 ```
 cd /home/video_cap && python3 setup.py install
 ```
-Now, clone the Stream-Synchronizer repository
+Now, clone the RTSP Video Stream Synchronizer repository
 ```
-cd /home && git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/sfmt-streamsync.git stream_sync && \
+cd /home && git clone -b "v1.0.0" https://github.com/LukasBommes/rtsp-streamsync.git stream_sync && \
 ```
 Build sources and install python wrapper
 ```
@@ -101,7 +101,7 @@ RUN apt-get update && \
 
 # Build h264-videocap from source
 RUN cd $HOME && \
-  git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/sfmt-videocap.git video_cap && \
+  git clone -b "v1.0.0" https://github.com/LukasBommes/mv-extractor-legacy.git video_cap && \
   cd video_cap && \
   chmod +x install.sh && \
   ./install.sh
@@ -121,7 +121,7 @@ RUN cd $HOME/video_cap && \
 
 # Build stream-sync from source
 RUN cd $HOME && \
-  git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/sfmt-streamsync.git stream_sync && \
+  git clone -b "v1.0.0" https://github.com/LukasBommes/rtsp-streamsync.git stream_sync && \
   cd $HOME/stream_sync && \
   python3 setup.py install
 
@@ -180,7 +180,7 @@ Fig. 3 shows the overall architecture of the stream synchronization. The sender 
 
 <center>
 <img src="imgs/framework.png" alt="stream_sync_framework" width="300"/><br>
-<p>Fig. 3 - Overview of the synchronization algorithm of the Stream-Synchronizer.</p>
+<p>Fig. 3 - Overview of the synchronization algorithm of the RTSP Video Stream Synchronizer.</p>
 </center>
 
 ##### Frame Timestamp Estimation
