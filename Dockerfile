@@ -15,7 +15,7 @@ RUN apt-get update && \
 
 # Build h264-videocap from source
 RUN cd $HOME && \
-  git clone https://github.com/LukasBommes/mv-extractor-legacy.git video_cap && \
+  git clone -b v0.0.0 https://github.com/LukasBommes/mv-extractor-legacy.git video_cap && \
   cd video_cap && \
   chmod +x install.sh && \
   ./install.sh
