@@ -9,13 +9,13 @@ RUN apt-get update && \
 
 ###############################################################################
 #
-#							Python h264-videocap module
+#							mv-extractor library (legacy version)
 #
 ###############################################################################
 
 # Build h264-videocap from source
 RUN cd $HOME && \
-  git clone -b "v1.0.0" https://sfmt-auto:Ow36ODbBoSSezciC@github.com/LukasBommes/sfmt-videocap.git video_cap && \
+  git clone -b "v1.0.0" https://github.com/LukasBommes/mv-extractor-legacy.git video_cap && \
   cd video_cap && \
   chmod +x install.sh && \
   ./install.sh
