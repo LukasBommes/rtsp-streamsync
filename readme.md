@@ -95,7 +95,7 @@ RUN apt-get update && \
 
 ###############################################################################
 #
-#							Python h264-videocap module
+#							mv-extractor library (legacy version)
 #
 ###############################################################################
 
@@ -119,10 +119,13 @@ RUN cd $HOME/video_cap && \
 #
 ###############################################################################
 
-# Build stream-sync from source
-RUN cd $HOME && \
-  git clone -b "v1.0.0" https://github.com/LukasBommes/rtsp-streamsync.git stream_sync && \
-  cd $HOME/stream_sync && \
+WORKDIR $HOME/stream_sync
+
+COPY setup.py $HOME/stream_sync
+COPY src $HOME/stream_sync/src/
+
+# Install stream_sync Python module
+RUN cd /home/stream_sync && \
   python3 setup.py install
 
 WORKDIR $HOME
